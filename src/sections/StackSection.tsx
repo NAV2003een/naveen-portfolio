@@ -40,6 +40,19 @@ export default function StackSection() {
   return (
     <SectionTransitionWrapper>
       <section id="stack" className="relative px-6 md:px-12 py-24 md:py-32 bg-gradient-to-b from-void to-void">
+        <motion.div
+          className="absolute top-0 left-0 right-0 h-[45vh] pointer-events-none"
+          style={{
+            background: "radial-gradient(ellipse 70% 100% at 50% 0%, rgba(92,244,224,0.14), transparent 70%)",
+            maskImage: "linear-gradient(to bottom, black, transparent)",
+            WebkitMaskImage: "linear-gradient(to bottom, black, transparent)",
+          }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 1.4, ease: "easeOut" }}
+          aria-hidden="true"
+        />
       <FadeIn className="mb-12 md:mb-16 text-center">
         <motion.p
           initial={{ opacity: 0 }}

@@ -57,68 +57,75 @@ const projects: Project[] = [
   },
 ];
 
+function ProjectCard({ project, index }: { project: Project; index: number }) {
+  return (
+    <FadeIn delay={index * 0.1}>
+      <motion.div
+        whileHover={{ scale: 1.03, y: -5 }}
+        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+      >
+        <GlassCard className="p-6 md:p-8 h-full flex flex-col group hover:glow-border transition-all duration-300">
+          <div className="border-beam" />
+          <div className="flex justify-between items-start mb-4">
+            <span className="font-display font-extrabold text-4xl md:text-5xl text-white/10 group-hover:text-cyan-300/20 transition-colors">
+              {project.num}
+            </span>
+            <span className="font-mono text-xs text-cyan-300/70 group-hover:text-cyan-300 transition-colors">
+              {project.date}
+            </span>
+          </div>
+          <h3 className="font-display font-semibold text-lg md:text-2xl mb-3 group-hover:text-cyan-300 transition-colors">
+            {project.title}
+          </h3>
+          <div className="flex flex-wrap gap-2 mb-4">
+            {project.tags.map((tag) => (
+              <motion.span
+                key={tag}
+                whileHover={{ scale: 1.1 }}
+                className="font-mono text-[10px] md:text-xs px-2.5 py-1 rounded-full border border-cyan-300/20 text-cyan-300/80 bg-cyan-300/5 group-hover:border-cyan-300/50 group-hover:text-cyan-300 transition-all duration-300"
+              >
+                {tag}
+              </motion.span>
+            ))}
+          </div>
+          <ul className="space-y-2 mt-auto">
+            {project.points.map((point) => (
+              <motion.li
+                key={point}
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                className="text-white/60 text-sm flex gap-2 group-hover:text-white/80 transition-colors"
+              >
+                <span className="text-violet-400 mt-0.5 group-hover:text-neon-pink transition-colors">▸</span>
+                <span>{point}</span>
+              </motion.li>
+            ))}
+          </ul>
+        </GlassCard>
+      </motion.div>
+    </FadeIn>
+  );
+}
+
 export default function ProjectsSection() {
   return (
     <SectionTransitionWrapper>
       <section id="projects" className="relative px-6 md:px-12 py-24 md:py-32">
-      <FadeIn className="mb-12 md:mb-16 text-center">
-        <p className="font-mono text-xs md:text-sm uppercase tracking-widest text-cyan-300/70 mb-3 neon-glow">
-          02 — Selected Work
-        </p>
-        <h2 className="font-display font-bold text-3xl md:text-5xl">
-          Projects &amp; <span className="text-holo">builds</span>
-        </h2>
-      </FadeIn>
+        <FadeIn className="mb-12 md:mb-16 text-center">
+          <p className="font-mono text-xs md:text-sm uppercase tracking-widest text-cyan-300/70 mb-3 neon-glow">
+            02 — Selected Work
+          </p>
+          <h2 className="font-display font-bold text-3xl md:text-5xl">
+            Projects &amp; <span className="text-holo">builds</span>
+          </h2>
+        </FadeIn>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 max-w-6xl mx-auto">
-        {projects.map((project, i) => (
-          <FadeIn key={project.num} delay={i * 0.1}>
-            <motion.div
-              whileHover={{ scale: 1.03, y: -5 }}
-              transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            >
-              <GlassCard className="p-6 md:p-8 h-full flex flex-col group hover:glow-border transition-all duration-300">
-                <div className="flex justify-between items-start mb-4">
-                  <span className="font-display font-extrabold text-4xl md:text-5xl text-white/10 group-hover:text-cyan-300/20 transition-colors">
-                    {project.num}
-                  </span>
-                  <span className="font-mono text-xs text-cyan-300/70 group-hover:text-cyan-300 transition-colors">
-                    {project.date}
-                  </span>
-                </div>
-                <h3 className="font-display font-semibold text-lg md:text-2xl mb-3 group-hover:text-cyan-300 transition-colors">
-                  {project.title}
-                </h3>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.tags.map((tag) => (
-                    <motion.span
-                      key={tag}
-                      whileHover={{ scale: 1.1 }}
-                      className="font-mono text-[10px] md:text-xs px-2.5 py-1 rounded-full border border-cyan-300/20 text-cyan-300/80 bg-cyan-300/5 group-hover:border-cyan-300/50 group-hover:text-cyan-300 transition-all duration-300"
-                    >
-                      {tag}
-                    </motion.span>
-                  ))}
-                </div>
-                <ul className="space-y-2 mt-auto">
-                  {project.points.map((point) => (
-                    <motion.li
-                      key={point}
-                      initial={{ opacity: 0, x: -10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      className="text-white/60 text-sm flex gap-2 group-hover:text-white/80 transition-colors"
-                    >
-                      <span className="text-violet-400 mt-0.5 group-hover:text-neon-pink transition-colors">▸</span>
-                      <span>{point}</span>
-                    </motion.li>
-                  ))}
-                </ul>
-              </GlassCard>
-            </motion.div>
-          </FadeIn>
-        ))}
-      </div>
-    </section>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 max-w-6xl mx-auto">
+          {projects.map((project, i) => (
+            <ProjectCard key={project.num} project={project} index={i} />
+          ))}
+        </div>
+      </section>
     </SectionTransitionWrapper>
   );
 }

@@ -1,5 +1,6 @@
 import FadeIn from "../components/FadeIn";
 import MagneticButton from "../components/MagneticButton";
+import SignatureCore from "../components/SignatureCore";
 import { motion } from "framer-motion";
 import SectionTransitionWrapper from "../components/SectionTransitionWrapper";
 
@@ -18,6 +19,7 @@ export default function ContactSection() {
       />
 
       <FadeIn>
+        <SignatureCore className="w-72 h-72 md:w-96 md:h-96 mb-2" />
         <p className="font-mono text-xs md:text-sm uppercase tracking-widest text-cyan-300/70 mb-3 neon-glow">
           05 — Contact
         </p>
