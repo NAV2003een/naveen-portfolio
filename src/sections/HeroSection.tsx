@@ -4,21 +4,20 @@ import SectionTransitionWrapper from "../components/SectionTransitionWrapper";
 import HolographicCore from "../components/HolographicCore";
 
 const consoleLines = [
-  "> booting premium console...",
-  "> initializing: Naveen Kumar G",
-  "> stack: ABAP Cloud | MERN | Clean Core",
-  "> mode: enterprise-grade",
-  "> status: ready_to_build",
+  "booting premium console...",
+  "initializing: Naveen Kumar G",
+  "stack: ABAP Cloud | MERN | Clean Core",
+  "mode: enterprise-grade",
+  "status: ready_to_build ✓",
 ];
 
 export default function HeroSection() {
   return (
     <SectionTransitionWrapper>
-      <section className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-24 pb-16 overflow-hidden">
+      <section id="hero" className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-24 pb-16 overflow-hidden">
         <div className="absolute inset-0 bg-grid opacity-40" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-void pointer-events-none" />
 
-        {/* 3D Core — replaces the two blurred orbs */}
         <HolographicCore />
         <div
           className="absolute inset-0 pointer-events-none"
@@ -30,7 +29,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-            className="font-mono text-xs md:text-sm uppercase tracking-widest text-cyan-300 mb-6 glass glow-border rounded-full px-5 py-2 neon-glow"
+            className="font-mono text-xs md:text-sm uppercase tracking-widest text-cyan-300 mb-6 glass glow-border rounded-full px-5 py-2 neon-glow text-center"
           >
             SAP Certified · ABAP Cloud · MERN Developer
           </motion.div>
@@ -72,8 +71,29 @@ export default function HeroSection() {
           >
             <MagneticButton href="#projects" variant="primary">View Projects</MagneticButton>
             <MagneticButton href="#contact" variant="secondary">Get in Touch</MagneticButton>
+            <motion.a
+              href="/717822D133-Naveenkumar G SD (2).pdf"
+              download="Naveen_Kumar_G_Resume.pdf"
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.97 }}
+              className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider px-6 py-3 rounded-full transition-all duration-300 glass"
+              style={{
+                border: "1px solid rgba(168,85,247,0.4)",
+                color: "#A855F7",
+                boxShadow: "0 0 0 0 rgba(168,85,247,0.4)",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.boxShadow = "0 0 18px rgba(168,85,247,0.5), 0 0 40px rgba(168,85,247,0.2)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.boxShadow = "0 0 0 0 rgba(168,85,247,0.4)";
+              }}
+            >
+              ⬇ Download CV
+            </motion.a>
           </motion.div>
 
+          {/* Console — fixed: no double > */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}

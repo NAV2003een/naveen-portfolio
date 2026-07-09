@@ -74,6 +74,7 @@ export default function StackSection() {
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
             >
               <GlassCard className="p-6 md:p-8 h-full group hover:glow-border transition-all duration-300">
+                <div className="border-beam beam-cyan" />
                 <div className="flex items-center gap-3 mb-4">
                   <span className="text-3xl">{group.icon}</span>
                   <h3 className="font-display font-semibold text-lg md:text-xl text-cyan-300 group-hover:text-cyan-200 transition-colors">

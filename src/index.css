@@ -8,7 +8,7 @@
   --color-glass-border: rgba(255,255,255,0.08);
   --color-sap: #0070F2;
   --color-cyan: #5CF4E0;
-  --color-violet: #7C5CFF;
+  --color-violet: #A855F7;
   --color-neon-pink: #FF006E;
   --color-neon-lime: #00FF41;
   --font-display: 'Space Grotesk', sans-serif;
@@ -26,6 +26,14 @@ body {
   overflow-x: clip;
 }
 
+/* ─── Section-level card glow colour tokens ─── */
+:root {
+  --card-glow-cyan:   #5CF4E0;
+  --card-glow-violet: #C084FC;
+  --card-glow-amber:  #FFAB40;
+  --card-glow-green:  #00FF88;
+}
+
 /* Background Grid Animation */
 .bg-grid {
   background-image:
@@ -40,9 +48,8 @@ body {
   100% { background-position: 48px 48px; }
 }
 
-/* Animated Gradient Background */
 .gradient-bg {
-  background: linear-gradient(-45deg, #0070F2, #05080F, #5CF4E0, #7C5CFF);
+  background: linear-gradient(-45deg, #0070F2, #05080F, #5CF4E0, #A855F7);
   background-size: 400% 400%;
   animation: gradientShift 15s ease infinite;
 }
@@ -53,9 +60,8 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-/* Holographic Text Gradient */
 .text-holo {
-  background: linear-gradient(100deg, #0070F2 0%, #5CF4E0 50%, #7C5CFF 100%);
+  background: linear-gradient(100deg, #0070F2 0%, #5CF4E0 50%, #A855F7 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -65,10 +71,9 @@ body {
 
 @keyframes holoShift {
   0%, 100% { filter: brightness(1); }
-  50% { filter: brightness(1.2); }
+  50% { filter: brightness(1.3); }
 }
 
-/* Premium Glass Effect */
 .glass {
   background: var(--color-glass);
   border: 1px solid var(--color-glass-border);
@@ -77,12 +82,34 @@ body {
   box-shadow: inset 0 0 20px rgba(92,244,224,0.05);
 }
 
+/* ══════════════════════════════════════════
+   @property registrations
+   ══════════════════════════════════════════ */
 @property --beam-angle {
   syntax: '<angle>';
   inherits: false;
   initial-value: 0deg;
 }
 
+@property --beam-r {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 200;
+}
+@property --beam-g {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 132;
+}
+@property --beam-b {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 252;
+}
+
+/* ══════════════════════════════════════════
+   Running Border Beam — base (clockwise)
+   ══════════════════════════════════════════ */
 .border-beam {
   position: absolute;
   inset: 0;
@@ -91,36 +118,73 @@ body {
   background: conic-gradient(
     from var(--beam-angle),
     transparent 0%,
-    transparent 65%,
-    rgba(124, 92, 255, 0.4) 75%,
-    rgba(124, 92, 255, 0.98) 85%,
-    #c4b5fd 90%,
-    rgba(124, 92, 255, 0.98) 95%,
+    transparent 70%,
+    rgba(var(--beam-r), var(--beam-g), var(--beam-b), 0.95) 82%,
+    #ffffff 88%,
+    rgba(var(--beam-r), var(--beam-g), var(--beam-b), 0.95) 94%,
     transparent 100%
   );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box,
-                linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s ease;
-  filter: drop-shadow(0 0 8px rgba(124, 92, 255, 0.9))
-          drop-shadow(0 0 16px rgba(124, 92, 255, 0.5));
+  transition: opacity 0.25s ease;
+  filter:
+    drop-shadow(0 0 8px rgba(var(--beam-r), var(--beam-g), var(--beam-b), 0.9))
+    drop-shadow(0 0 18px rgba(var(--beam-r), var(--beam-g), var(--beam-b), 0.5));
+  /* Default: violet */
+  --beam-r: 200;
+  --beam-g: 132;
+  --beam-b: 252;
 }
 
-.group:hover .border-beam {
-  opacity: 1;
-  animation: beam-spin 2s linear infinite;
+/* ── Colour variants ── */
+.beam-cyan   { --beam-r: 92;  --beam-g: 244; --beam-b: 224; }
+.beam-amber  { --beam-r: 255; --beam-g: 171; --beam-b: 64;  }
+.beam-green  { --beam-r: 0;   --beam-g: 255; --beam-b: 136; }
+.beam-pink   { --beam-r: 255; --beam-g: 0;   --beam-b: 110; }
+
+/* ── Anti-clockwise beam (left column) ── */
+.border-beam-ccw {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: conic-gradient(
+    from var(--beam-angle),
+    transparent 0%,
+    transparent 70%,
+    rgba(var(--beam-r), var(--beam-g), var(--beam-b), 0.95) 82%,
+    #ffffff 88%,
+    rgba(var(--beam-r), var(--beam-g), var(--beam-b), 0.95) 94%,
+    transparent 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  filter:
+    drop-shadow(0 0 8px rgba(var(--beam-r), var(--beam-g), var(--beam-b), 0.9))
+    drop-shadow(0 0 18px rgba(var(--beam-r), var(--beam-g), var(--beam-b), 0.5));
+  /* Default: pink */
+  --beam-r: 255;
+  --beam-g: 0;
+  --beam-b: 110;
 }
 
-@keyframes beam-spin {
-  to { --beam-angle: 360deg; }
-}
+/* ── Trigger on parent hover ── */
+.group:hover .border-beam     { opacity: 1; animation: beam-cw  2.2s linear infinite; }
+.group:hover .border-beam-ccw { opacity: 1; animation: beam-ccw 2.2s linear infinite; }
 
-/* Glow Border with Enhanced Effect */
+@keyframes beam-cw  { to { --beam-angle:  360deg; } }
+@keyframes beam-ccw { to { --beam-angle: -360deg; } }
+
+/* Glow Border */
 .glow-border {
-  box-shadow: 0 0 0 1px rgba(92,244,224,0.15), 
+  box-shadow: 0 0 0 1px rgba(92,244,224,0.15),
               0 8px 32px rgba(0,112,242,0.08),
               inset 0 0 20px rgba(92,244,224,0.05);
   position: relative;
@@ -146,115 +210,64 @@ body {
 }
 
 .glow-border:hover {
-  box-shadow: 0 0 0 1px rgba(92,244,224,0.4), 
+  box-shadow: 0 0 0 1px rgba(92,244,224,0.4),
               0 8px 40px rgba(92,244,224,0.25),
               inset 0 0 30px rgba(92,244,224,0.1),
               0 0 20px rgba(92,244,224,0.2);
 }
 
-/* Neon Glow Effect */
 .neon-glow {
   text-shadow: 0 0 10px rgba(92,244,224,0.5),
                0 0 20px rgba(0,112,242,0.3),
                0 0 30px rgba(92,244,224,0.2);
 }
 
-/* Pulsing Animation */
 @keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 0 0 rgba(92,244,224,0.7),
-                0 8px 32px rgba(0,112,242,0.08);
-  }
-  50% {
-    box-shadow: 0 0 0 10px rgba(92,244,224,0),
-                0 8px 40px rgba(92,244,224,0.2);
-  }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(92,244,224,0.7), 0 8px 32px rgba(0,112,242,0.08); }
+  50%       { box-shadow: 0 0 0 10px rgba(92,244,224,0), 0 8px 40px rgba(92,244,224,0.2); }
 }
+.pulse-glow { animation: pulse-glow 2s infinite; }
 
-.pulse-glow {
-  animation: pulse-glow 2s infinite;
-}
-
-/* Floating Animation */
 @keyframes float {
   0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(1deg); }
+  50%       { transform: translateY(-20px) rotate(1deg); }
 }
+.float { animation: float 6s ease-in-out infinite; }
 
-.float {
-  animation: float 6s ease-in-out infinite;
-}
-
-/* Shimmer Effect */
 @keyframes shimmer {
-  0% { background-position: -1000px 0; }
-  100% { background-position: 1000px 0; }
+  0%   { background-position: -1000px 0; }
+  100% { background-position:  1000px 0; }
 }
-
 .shimmer {
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(92,244,224,0.2),
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, rgba(92,244,224,0.2), transparent);
   background-size: 1000px 100%;
   animation: shimmer 3s infinite;
 }
 
-/* Magnetic Button Effect */
-.magnetic-btn {
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
+.magnetic-btn { position: relative; overflow: hidden; transition: all 0.3s ease; }
 .magnetic-btn::before {
   content: '';
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
+  top: 50%; left: 50%;
+  width: 0; height: 0;
   border-radius: 50%;
   background: rgba(255,255,255,0.1);
   transform: translate(-50%, -50%);
   transition: width 0.6s, height 0.6s;
 }
+.magnetic-btn:hover::before { width: 300px; height: 300px; }
 
-.magnetic-btn:hover::before {
-  width: 300px;
-  height: 300px;
-}
-
-/* Gradient Button */
 .gradient-btn {
-  background: linear-gradient(135deg, #0070F2, #5CF4E0, #7C5CFF);
+  background: linear-gradient(135deg, #0070F2, #5CF4E0, #A855F7);
   background-size: 200% 200%;
   animation: gradientShift 3s ease infinite;
   transition: all 0.3s ease;
 }
+.gradient-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(0,112,242,0.3); }
 
-.gradient-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 24px rgba(0,112,242,0.3);
-}
+.scroll-reveal { opacity: 0; transform: translateY(30px); animation: revealOnScroll 0.7s ease-out forwards; }
+@keyframes revealOnScroll { to { opacity: 1; transform: translateY(0); } }
 
-/* Scroll Trigger Animation */
-.scroll-reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  animation: revealOnScroll 0.7s ease-out forwards;
-}
-
-@keyframes revealOnScroll {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Animated Border */
 .animated-border {
   position: relative;
   border: 2px solid transparent;
@@ -262,28 +275,17 @@ body {
               linear-gradient(135deg, #0070F2, #5CF4E0) border-box;
   animation: borderRotate 4s linear infinite;
 }
+@keyframes borderRotate { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); } }
 
-@keyframes borderRotate {
-  0% { filter: hue-rotate(0deg); }
-  100% { filter: hue-rotate(360deg); }
-}
-
-/* Particles Background */
-.particles {
-  position: relative;
-  overflow: hidden;
-}
-
+.particles { position: relative; overflow: hidden; }
 .particle {
   position: absolute;
-  width: 4px;
-  height: 4px;
+  width: 4px; height: 4px;
   background: rgba(92,244,224,0.5);
   border-radius: 50%;
   animation: float 20s infinite;
 }
 
-/* Responsive */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -294,232 +296,101 @@ body {
 
 ::-webkit-scrollbar { width: 0px; }
 
-/* F1 Racing Theme Extensions */
-
-/* Carbon Fiber Texture */
+/* ── F1 Theme ── */
 .carbon-fiber {
-  background-image: 
+  background-image:
     repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,.03) 2px, rgba(0,0,0,.03) 4px),
     repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.03) 2px, rgba(0,0,0,.03) 4px);
   background-size: 4px 4px;
 }
 
-/* Race Track Curbing Accent (Red/White Stripe) */
-.curbing-accent {
-  position: relative;
-}
-
+.curbing-accent { position: relative; }
 .curbing-accent::before {
   content: '';
   position: absolute;
   inset: 0;
   border-left: 3px solid #FF006E;
-  border-right: 3px solid rgba(255, 255, 255, 0.1);
+  border-right: 3px solid rgba(255,255,255,0.1);
   pointer-events: none;
   animation: curbingPulse 2s ease-in-out infinite;
 }
-
 @keyframes curbingPulse {
-  0%, 100% {
-    border-left-color: #FF006E;
-    border-right-color: rgba(255, 255, 255, 0.1);
-  }
-  50% {
-    border-left-color: #00FF41;
-    border-right-color: rgba(255, 255, 255, 0.3);
-  }
+  0%, 100% { border-left-color: #FF006E; border-right-color: rgba(255,255,255,0.1); }
+  50%       { border-left-color: #00FF41; border-right-color: rgba(255,255,255,0.3); }
 }
 
-/* Tachometer Telemetry Readout */
 .tachometer-readout {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.75rem;
   letter-spacing: 0.15em;
   color: #00FF41;
-  text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
+  text-shadow: 0 0 8px rgba(0,255,65,0.5);
   animation: telemetryFlicker 0.15s ease-in-out infinite;
 }
+@keyframes telemetryFlicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
 
-@keyframes telemetryFlicker {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.8; }
-}
-
-/* F1 Speed Lines (Kinetic Motion) */
-.speed-lines {
-  position: relative;
-  overflow: hidden;
-}
-
+.speed-lines { position: relative; overflow: hidden; }
 .speed-lines::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: repeating-linear-gradient(
-    90deg,
-    transparent,
-    transparent 10px,
-    rgba(92, 244, 224, 0.1) 10px,
-    rgba(92, 244, 224, 0.1) 20px
-  );
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(92,244,224,0.1) 10px, rgba(92,244,224,0.1) 20px);
   animation: speedLinesPass 1.5s linear infinite;
   pointer-events: none;
 }
+@keyframes speedLinesPass { 0% { left: -100%; } 100% { left: 100%; } }
 
-@keyframes speedLinesPass {
-  0% { left: -100%; }
-  100% { left: 100%; }
-}
-
-/* Neon Trail Effect (G-Force Glow) */
 .g-force-trail {
   position: relative;
-  box-shadow: 
-    0 0 10px rgba(92, 244, 224, 0.3),
-    0 0 20px rgba(0, 112, 242, 0.2),
-    0 0 30px rgba(124, 92, 255, 0.15);
+  box-shadow: 0 0 10px rgba(92,244,224,0.3), 0 0 20px rgba(0,112,242,0.2), 0 0 30px rgba(168,85,247,0.15);
   animation: gForceTrail 1s ease-out infinite;
 }
-
 @keyframes gForceTrail {
-  0% {
-    box-shadow: 
-      0 0 20px rgba(92, 244, 224, 0.5),
-      0 0 40px rgba(0, 112, 242, 0.3),
-      0 0 60px rgba(124, 92, 255, 0.2);
-  }
-  100% {
-    box-shadow: 
-      0 0 5px rgba(92, 244, 224, 0.1),
-      0 0 15px rgba(0, 112, 242, 0.05),
-      0 0 25px rgba(124, 92, 255, 0.02);
-  }
+  0%   { box-shadow: 0 0 20px rgba(92,244,224,0.5), 0 0 40px rgba(0,112,242,0.3), 0 0 60px rgba(168,85,247,0.2); }
+  100% { box-shadow: 0 0 5px rgba(92,244,224,0.1),  0 0 15px rgba(0,112,242,0.05), 0 0 25px rgba(168,85,247,0.02); }
 }
 
-/* F1 Braking Indicator (Red Flash) */
-.brake-indicator {
-  animation: brakingFlash 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
+.brake-indicator { animation: brakingFlash 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards; }
 @keyframes brakingFlash {
-  0% {
-    background-color: rgba(255, 0, 110, 0.2);
-    box-shadow: 0 0 20px rgba(255, 0, 110, 0.4);
-  }
-  100% {
-    background-color: transparent;
-    box-shadow: 0 0 0px rgba(255, 0, 110, 0);
-  }
+  0%   { background-color: rgba(255,0,110,0.2); box-shadow: 0 0 20px rgba(255,0,110,0.4); }
+  100% { background-color: transparent; box-shadow: 0 0 0px rgba(255,0,110,0); }
 }
 
-/* DRS (Drag Reduction System) Speed Boost Glow */
 .drs-active {
-  background: linear-gradient(135deg, rgba(0, 255, 65, 0.1), rgba(92, 244, 224, 0.1));
-  box-shadow: 
-    inset 0 0 15px rgba(0, 255, 65, 0.2),
-    0 0 20px rgba(0, 255, 65, 0.3);
+  background: linear-gradient(135deg, rgba(0,255,65,0.1), rgba(92,244,224,0.1));
+  box-shadow: inset 0 0 15px rgba(0,255,65,0.2), 0 0 20px rgba(0,255,65,0.3);
   animation: drsBoost 0.6s ease-out;
 }
-
 @keyframes drsBoost {
-  0% {
-    background: linear-gradient(135deg, rgba(0, 255, 65, 0.3), rgba(92, 244, 224, 0.2));
-    box-shadow: 
-      inset 0 0 25px rgba(0, 255, 65, 0.4),
-      0 0 40px rgba(0, 255, 65, 0.6);
-  }
-  100% {
-    background: linear-gradient(135deg, rgba(0, 255, 65, 0.1), rgba(92, 244, 224, 0.1));
-    box-shadow: 
-      inset 0 0 15px rgba(0, 255, 65, 0.2),
-      0 0 20px rgba(0, 255, 65, 0.3);
-  }
+  0%   { background: linear-gradient(135deg,rgba(0,255,65,0.3),rgba(92,244,224,0.2)); box-shadow: inset 0 0 25px rgba(0,255,65,0.4),0 0 40px rgba(0,255,65,0.6); }
+  100% { background: linear-gradient(135deg,rgba(0,255,65,0.1),rgba(92,244,224,0.1)); box-shadow: inset 0 0 15px rgba(0,255,65,0.2),0 0 20px rgba(0,255,65,0.3); }
 }
 
-/* Pit Stop Indicator (Yellow Flag) */
 .pit-stop-flag {
   border-left: 4px solid #FFD700;
-  background: linear-gradient(90deg, rgba(255, 215, 0, 0.05), transparent);
+  background: linear-gradient(90deg, rgba(255,215,0,0.05), transparent);
   animation: pitStopWave 2s ease-in-out infinite;
 }
+@keyframes pitStopWave { 0%, 100% { border-left-color: #FFD700; } 50% { border-left-color: #FFA500; } }
 
-@keyframes pitStopWave {
-  0%, 100% { border-left-color: #FFD700; }
-  50% { border-left-color: #FFA500; }
-}
-
-/* Lap Timer Readout */
 .lap-timer {
   font-variant-numeric: tabular-nums;
   font-family: 'JetBrains Mono', monospace;
   letter-spacing: 0.1em;
   color: #5CF4E0;
-  text-shadow: 0 0 12px rgba(92, 244, 224, 0.6);
+  text-shadow: 0 0 12px rgba(92,244,244,0.6);
 }
 
-/* Overall: Apply F1 aesthetic to sections */
-.f1-section {
-  position: relative;
-  overflow: hidden;
-}
-
+.f1-section { position: relative; overflow: hidden; }
 .f1-section::before {
   content: '';
   position: absolute;
-  top: -50%;
-  right: -20%;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(92, 244, 224, 0.08), transparent);
+  top: -50%; right: -20%;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(92,244,224,0.08), transparent);
   border-radius: 50%;
   pointer-events: none;
   animation: f1Glow 8s ease-in-out infinite;
 }
-
-@keyframes f1Glow {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
-}
-
-@property --beam-angle {
-  syntax: '<angle>';
-  inherits: false;
-  initial-value: 0deg;
-}
-
-.border-beam {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 2px;
-  background: conic-gradient(
-    from var(--beam-angle),
-    transparent 0%,
-    transparent 70%,
-    rgba(124, 92, 255, 0.95) 82%,
-    #ffffff 88%,
-    rgba(124, 92, 255, 0.95) 94%,
-    transparent 100%
-  );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease;
-  filter: drop-shadow(0 0 10px rgba(124, 92, 255, 0.85));
-}
-
-.group:hover .border-beam {
-  opacity: 1;
-  animation: beam-spin 2.2s linear infinite;
-}
-
-@keyframes beam-spin {
-  to {
-    --beam-angle: 360deg;
-  }
-}
+@keyframes f1Glow { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }

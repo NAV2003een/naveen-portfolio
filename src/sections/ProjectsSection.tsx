@@ -57,7 +57,17 @@ const projects: Project[] = [
   },
 ];
 
-function ProjectCard({ project, index }: { project: Project; index: number }) {
+function ProjectCard({
+  project,
+  index,
+  side,
+}: {
+  project: Project;
+  index: number;
+  side: "left" | "right";
+}) {
+  const isLeft = side === "left";
+
   return (
     <FadeIn delay={index * 0.1}>
       <motion.div
@@ -65,7 +75,12 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         transition={{ type: "spring", stiffness: 300, damping: 25 }}
       >
         <GlassCard className="p-6 md:p-8 h-full flex flex-col group hover:glow-border transition-all duration-300">
-          <div className="border-beam" />
+          {isLeft ? (
+            <div className="border-beam-ccw beam-pink" />
+          ) : (
+            <div className="border-beam" />
+          )}
+
           <div className="flex justify-between items-start mb-4">
             <span className="font-display font-extrabold text-4xl md:text-5xl text-white/10 group-hover:text-cyan-300/20 transition-colors">
               {project.num}
@@ -74,9 +89,11 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               {project.date}
             </span>
           </div>
+
           <h3 className="font-display font-semibold text-lg md:text-2xl mb-3 group-hover:text-cyan-300 transition-colors">
             {project.title}
           </h3>
+
           <div className="flex flex-wrap gap-2 mb-4">
             {project.tags.map((tag) => (
               <motion.span
@@ -88,6 +105,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               </motion.span>
             ))}
           </div>
+
           <ul className="space-y-2 mt-auto">
             {project.points.map((point) => (
               <motion.li
@@ -96,7 +114,15 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                 whileInView={{ opacity: 1, x: 0 }}
                 className="text-white/60 text-sm flex gap-2 group-hover:text-white/80 transition-colors"
               >
-                <span className="text-violet-400 mt-0.5 group-hover:text-neon-pink transition-colors">▸</span>
+                <span
+                  className={`mt-0.5 transition-colors ${
+                    isLeft
+                      ? "text-pink-500 group-hover:text-neon-pink"
+                      : "text-violet-400 group-hover:text-purple-300"
+                  }`}
+                >
+                  ▸
+                </span>
                 <span>{point}</span>
               </motion.li>
             ))}
@@ -108,6 +134,9 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 }
 
 export default function ProjectsSection() {
+  const leftProjects = projects.filter((_, i) => i % 2 === 0);
+  const rightProjects = projects.filter((_, i) => i % 2 !== 0);
+
   return (
     <SectionTransitionWrapper>
       <section id="projects" className="relative px-6 md:px-12 py-24 md:py-32">
@@ -118,12 +147,29 @@ export default function ProjectsSection() {
           <h2 className="font-display font-bold text-3xl md:text-5xl">
             Projects &amp; <span className="text-holo">builds</span>
           </h2>
+          <div className="flex justify-center gap-6 mt-4">
+            <span className="font-mono text-[10px] text-pink-400/70 flex items-center gap-1.5">
+              <span className="inline-block w-3 h-[2px] bg-pink-500 rounded" />
+              
+            </span>
+            <span className="font-mono text-[10px] text-violet-400/70 flex items-center gap-1.5">
+              <span className="inline-block w-3 h-[2px] bg-violet-400 rounded" />
+              
+            </span>
+          </div>
         </FadeIn>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6 max-w-6xl mx-auto">
-          {projects.map((project, i) => (
-            <ProjectCard key={project.num} project={project} index={i} />
-          ))}
+          <div className="flex flex-col gap-5 md:gap-6">
+            {leftProjects.map((project, i) => (
+              <ProjectCard key={project.num} project={project} index={i * 2} side="left" />
+            ))}
+          </div>
+          <div className="flex flex-col gap-5 md:gap-6 md:mt-10">
+            {rightProjects.map((project, i) => (
+              <ProjectCard key={project.num} project={project} index={i * 2 + 1} side="right" />
+            ))}
+          </div>
         </div>
       </section>
     </SectionTransitionWrapper>

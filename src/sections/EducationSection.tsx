@@ -30,7 +30,7 @@ export default function EducationSection() {
       <section id="education" className="relative px-6 md:px-12 py-24 md:py-32">
       <FadeIn className="mb-12 md:mb-16 text-center">
         <p className="font-mono text-xs md:text-sm uppercase tracking-widest text-cyan-300/70 mb-3 neon-glow">
-          04 — Education
+          03 — Education
         </p>
         <h2 className="font-display font-bold text-3xl md:text-5xl">
           Academic <span className="text-holo">background</span>
@@ -45,6 +45,7 @@ export default function EducationSection() {
               transition={{ type: "spring", stiffness: 300, damping: 25 }}
             >
               <GlassCard className="p-5 md:p-6 group hover:glow-border transition-all duration-300">
+                <div className="border-beam beam-green" />
                 <div className="flex gap-3">
                   <span className="text-2xl">{edu.icon}</span>
                   <div className="flex-1">

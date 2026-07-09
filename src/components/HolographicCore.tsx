@@ -13,7 +13,6 @@ const PARTICLE_COUNT_DESKTOP = 1400;
 const PARTICLE_COUNT_MOBILE = 700;
 const NODE_RADIUS = 3.4;
 
-// Edit these to change the constellation labels
 const SKILLS = [
   { label: "SAP BTP", sub: "ABAP RAP · CDS Views" },
   { label: "ABAP Cloud", sub: "Clean Core" },
@@ -160,7 +159,10 @@ function CoreWireframe({ reducedMotion, progressRef }: { reducedMotion: boolean;
 
   useFrame((state) => {
     if (materialRef.current) {
-      materialRef.current.opacity = 0.35 * (1 - progressRef.current * 0.85);
+      // Smoothly vanish as scatter begins (scroll 20% → 50%)
+      const fade = 1 - THREE.MathUtils.smoothstep(progressRef.current, 0.2, 0.5);
+      materialRef.current.opacity = 0.35 * fade;
+      materialRef.current.visible = materialRef.current.opacity > 0.001;
     }
     if (!meshRef.current || reducedMotion) return;
     const t = state.clock.elapsedTime;
@@ -189,12 +191,28 @@ function ConstellationLabels({ nodeCenters, visible }: { nodeCenters: THREE.Vect
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.8, y: 8 }}
                   transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-                  className="glass glow-border rounded-xl px-3 py-2 whitespace-nowrap text-center"
-                >
-                  <div className="font-mono text-[11px] uppercase tracking-wider text-cyan-300 neon-glow">
-                    {skill.label}
-                  </div>
-                  <div className="text-[10px] text-white/50 mt-0.5">{skill.sub}</div>
+                    className="rounded-xl px-3 py-2 whitespace-nowrap text-center"
+                    style={{
+                      background: "rgba(5, 8, 15, 0.75)",
+                      border: "1px solid rgba(92, 244, 224, 0.6)",
+                      backdropFilter: "blur(14px)",
+                      boxShadow: `
+                        0 0 8px rgba(92, 244, 224, 0.9),
+                        0 0 20px rgba(92, 244, 224, 0.6),
+                        0 0 40px rgba(92, 244, 224, 0.3),
+                        inset 0 0 12px rgba(92, 244, 224, 0.15)
+                      `,
+                    }}
+                  >
+                    <div
+                      className="font-mono text-[11px] uppercase tracking-wider text-cyan-300"
+                      style={{
+                        textShadow: "0 0 8px #5CF4E0, 0 0 20px #5CF4E0, 0 0 35px #5CF4E0",
+                      }}
+                    >
+                      {skill.label}
+                    </div>
+                    <div className="text-[10px] mt-0.5" style={{ color: "rgba(92,244,224,0.65)" }}>{skill.sub}</div>
                 </motion.div>
               )}
             </AnimatePresence>
