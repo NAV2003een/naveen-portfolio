@@ -5,9 +5,10 @@ import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 interface GlassCardProps {
   children: ReactNode;
   className?: string;
+  onClick?: () => void;
 }
 
-export default function GlassCard({ children, className = "" }: GlassCardProps) {
+export default function GlassCard({ children, className = "", onClick }: GlassCardProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   const x = useMotionValue(0);
@@ -40,6 +41,7 @@ export default function GlassCard({ children, className = "" }: GlassCardProps) 
   return (
     <motion.div
       ref={ref}
+      onClick={onClick}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{

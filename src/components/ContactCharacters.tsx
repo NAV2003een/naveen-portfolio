@@ -319,15 +319,27 @@ export function CommDroid({ onSend }: { onSend?: () => void }) {
     setLines((prev) => [...prev, `> you: ${msg}`, ">> sending..."]);
 
     try {
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+      if (!serviceId || !templateId || !publicKey) {
+        throw new Error("EmailJS is not configured");
+      }
+
       await emailjs.send(
-        "YOUR_SERVICE_ID",
-        "YOUR_TEMPLATE_ID",
+        serviceId,
+        templateId,
         {
           message: msg,
-          from_name: "Portfolio Visitor",
-          to_name: "Naveen",
+          name: "Portfolio Visitor",
+          time: new Date().toLocaleString("en-IN", {
+            timeZone: "Asia/Kolkata",
+            dateStyle: "medium",
+            timeStyle: "short",
+          }),
         },
-        "YOUR_PUBLIC_KEY"
+        publicKey
       );
       setLines((prev) => {
         const next = [...prev];
