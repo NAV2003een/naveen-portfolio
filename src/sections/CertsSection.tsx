@@ -27,6 +27,20 @@ const certs = [
     icon: "🤖",
     image: "/certs/mcp-project.jpg",
   },
+  {
+    title: "Software Engineering Job Simulation",
+    org: "Commonwealth Bank (via Forage)",
+    date: "Jul 2026",
+    icon: "💻",
+    image: "/certs/cba-software-engineering.jpg",
+  },
+  {
+    title: "Data Analytics Job Simulation",
+    org: "Deloitte (via Forage)",
+    date: "Jul 2026",
+    icon: "📊",
+    image: "/certs/deloitte-data-analytics.jpg",
+  },
 ];
 
 export default function CertsSection() {
